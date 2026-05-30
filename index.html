@@ -33,7 +33,7 @@
         <h1>ZUK Панель Управления</h1>
         <div class="status-bar">
             <span id="user-info">Администратор</span>
-            <span id="ping-status" style="color: #00ff00;">● Автоматический поиск ПК</span>
+            <span id="ping-status" style="color: #00ff00;">● Облако Системы ZUK</span>
         </div>
     </header>
 
@@ -53,7 +53,7 @@
     </div>
 
     <div class="console-box">
-        <div class="console-title">ZUK_TERMINAL_ENGINE v2.0</div>
+        <div class="console-title">ZUK_TERMINAL_ENGINE v2.5</div>
         <div class="console-row">
             <select id="shell-type"><option value="cmd">CMD</option><option value="ps">PS</option></select>
             <input type="text" id="raw-command" class="console-input" placeholder="Введите команду...">
@@ -71,51 +71,79 @@
         const REPO_NAME = "-fsotgbot";
         // ===========================================================
 
-        // Авто-сканирование репозитория на наличие запущенных клиентов
+        // Авто-поиск файлов-маяков в репозитории
         function fetchActivePCs() {
-            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/`;
-            fetch(url, { headers: { "Authorization": `token ${GITHUB_TOKEN}` } })
+            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/?nocache=${Date.now()}`;
+            fetch(url, { headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Accept": "application/vnd.github.v3+json" } })
             .then(res => res.json())
             .then(files => {
                 const selector = document.getElementById('pc-selector');
                 const currentValue = selector.value;
                 selector.innerHTML = '<option value="">-- Выберите найденный ПК --</option>';
                 
-                files.forEach(file => {
-                    if(file.name.endsWith('.json') && file.name !== 'package.json' && file.name !== 'task.json') {
-                        const pcName = file.name.replace('.json', '');
-                        const option = document.createElement('option');
-                        option.value = pcName; option.innerText = `💻 ${pcName}`;
-                        if(pcName === currentValue) option.selected = true;
-                        selector.appendChild(option);
-                    }
-                });
+                if(Array.isArray(files)) {
+                    files.forEach(file => {
+                        if(file.name.endsWith('.json') && file.name !== 'package.json' && file.name !== 'task.json') {
+                            const pcName = file.name.replace('.json', '');
+                            const option = document.createElement('option');
+                            option.value = pcName; option.innerText = `💻 ${pcName}`;
+                            if(pcName === currentValue || (currentValue === "" && pcName === "KOMPUTER")) option.selected = true;
+                            selector.appendChild(option);
+                        }
+                    });
+                }
                 if(selector.options.length === 1) { selector.innerHTML = '<option value="">❌ Активных ПК не обнаружено</option>'; }
-            }).catch(() => tg.showAlert("Ошибка автопоиска машин."));
+            }).catch(() => console.log("Ошибка обновления списка ПК."));
         }
 
+        // Запись команды внутрь файла конкретного ПК
         function commitTaskFile(targetPC, payloadData) {
             if (!targetPC) { tg.showAlert("Сначала выберите ПК из списка!"); return; }
-            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${targetPC}.json`;
+            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${targetPC}.json?nocache=${Date.now()}`;
             
-            fetch(url, { headers: { "Authorization": `token ${GITHUB_TOKEN}` } })
+            // 1. Сначала скачиваем актуальный SHA файла, чтобы гитхаб не выдал 409 ошибку
+            fetch(url, { headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Accept": "application/vnd.github.v3+json" } })
             .then(res => res.json())
             .then(fileData => {
                 const sha = fileData.sha;
-                const base64Content = btoa(unescape(encodeURIComponent(JSON.stringify(payloadData))));
+                
+                // Объединяем старые данные (чтобы сохранить структуру) и новые поля команды
+                let currentContent = {};
+                try {
+                    currentContent = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
+                } catch(e) {}
+
+                const finalPayload = {
+                    pc_id: targetPC,
+                    last_seen: currentContent.last_seen || Date.now(),
+                    last_processed_time: currentContent.last_processed_time || "0",
+                    type: payloadData.type,
+                    command: payloadData.command,
+                    timestamp: payloadData.timestamp
+                };
+
+                const base64Content = btoa(unescape(encodeURIComponent(JSON.stringify(finalPayload))));
+                
+                // 2. Отправляем обновленный файл назад на GitHub
                 return fetch(url, {
                     method: "PUT",
                     headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: "Trigger", content: base64Content, sha: sha })
+                    body: JSON.stringify({ message: `📡 Command for ${targetPC}`, content: base64Content, sha: sha })
                 });
             })
-            .then(res => { if(res.ok) tg.showPopup({ title: "Выполнено", message: `Сигнал отправлен на ${targetPC}`, buttons: [{type:"ok"}] }); })
-            .catch(() => tg.showAlert("Ошибка отправки."));
+            .then(res => { 
+                if(res.ok) {
+                    tg.showPopup({ title: "Успешно", message: `Команда отправлена на ${targetPC}! Она выполнится в течение 3 сек.`, buttons: [{type:"ok"}] });
+                } else {
+                    tg.showAlert("Ошибка записи на сервер GitHub.");
+                }
+            })
+            .catch(() => tg.showAlert("Не удалось связаться с сервером."));
         }
 
         function sendAction(actionType) {
             const pc = document.getElementById('pc-selector').value;
-            commitTaskFile(pc, { target_pc: pc, type: "button", command: actionType, timestamp: String(Date.now()) });
+            commitTaskFile(pc, { type: "button", command: actionType, timestamp: String(Date.now()) });
         }
 
         function sendTerminalCommand() {
@@ -123,12 +151,12 @@
             const shell = document.getElementById('shell-type').value;
             const text = document.getElementById('raw-command').value;
             if(!text.trim()) return;
-            commitTaskFile(pc, { target_pc: pc, type: shell, command: text, timestamp: String(Date.now()) });
+            commitTaskFile(pc, { type: shell, command: text, timestamp: String(Date.now()) });
             document.getElementById('raw-command').value = "";
         }
 
-        // Запуск сканирования при старте и каждые 7 секунд
-        fetchActivePCs(); setInterval(fetchActivePCs, 7000);
+        // Первичный поиск при открытии и автообновление списка каждые 5 секунд
+        fetchActivePCs(); setInterval(fetchActivePCs, 5000);
     </script>
 </body>
 </html>
