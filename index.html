@@ -11,165 +11,29 @@
             --container-bg: rgba(30, 30, 30, 0.75);
             --text-color: #d4d4d4;
             --accent-color: #007acc;
-            --accent-hover: #0062a3;
-            --danger-color: #f44336;
             --border-color: rgba(255, 255, 255, 0.1);
         }
-
-        /* Автоматическая адаптация под тему Telegram (если включена) */
         body.tg {
             --bg-color: var(--tg-theme-bg-color, #1e1e1e);
             --text-color: var(--tg-theme-text-color, #d4d4d4);
             --accent-color: var(--tg-theme-button-color, #007acc);
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        header {
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        h1 {
-            font-size: 1.4rem;
-            color: #ffffff;
-            margin-bottom: 5px;
-        }
-
-        .status-bar {
-            font-size: 0.85rem;
-            display: flex;
-            justify-content: space-between;
-            opacity: 0.8;
-        }
-
-        /* Выбор активного ПК (Селектор сессий) */
-        .select-box {
-            width: 100%;
-            padding: 10px;
-            background: var(--container-bg);
-            border: 1px solid var(--border-color);
-            color: #fff;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 1rem;
-            outline: none;
-            backdrop-filter: blur(10px); /* Эффект жидкого стекла */
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        /* Сетка управления кнопками */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            background: var(--container-bg);
-            border: 1px solid var(--border-color);
-            color: #ffffff;
-            padding: 15px 10px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-
-        .btn:active {
-            transform: scale(0.96);
-            background: var(--accent-color);
-            border-color: var(--accent-color);
-        }
-
-        .btn-icon {
-            font-size: 1.5rem;
-        }
-
-        .btn.danger:active {
-            background: var(--danger-color);
-            border-color: var(--danger-color);
-        }
-
-        /* Консольный блок ввода команд вручную */
-        .console-box {
-            background: #000000;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 12px;
-            margin-top: auto;
-        }
-
-        .console-title {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.8rem;
-            color: #888;
-            margin-bottom: 8px;
-        }
-
-        .console-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-
-        .console-row select {
-            background: #222;
-            border: 1px solid #444;
-            color: #00ff00;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 5px;
-            border-radius: 4px;
-        }
-
-        .console-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid #444;
-            color: #00ff00;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.95rem;
-            outline: none;
-            padding: 4px 0;
-        }
-
-        .console-btn {
-            background: #222;
-            border: 1px solid #444;
-            color: #00ff00;
-            padding: 4px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        .console-btn:active {
-            background: #333;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 15px; display: flex; flex-direction: column; min-height: 100vh; }
+        header { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        h1 { font-size: 1.4rem; color: #ffffff; margin-bottom: 5px; }
+        .status-bar { font-size: 0.85rem; display: flex; justify-content: space-between; opacity: 0.8; }
+        .select-box { width: 100%; padding: 10px; background: var(--container-bg); border: 1px solid var(--border-color); color: #fff; border-radius: 8px; margin-bottom: 20px; font-size: 1rem; outline: none; backdrop-filter: blur(10px); }
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+        .btn { background: var(--container-bg); border: 1px solid var(--border-color); color: #ffffff; padding: 15px 10px; border-radius: 10px; font-size: 0.95rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: all 0.2s ease; }
+        .btn:active { transform: scale(0.96); background: var(--accent-color); }
+        .btn-icon { font-size: 1.5rem; }
+        .console-box { background: #000000; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-top: auto; }
+        .console-title { font-family: monospace; font-size: 0.8rem; color: #888; margin-bottom: 8px; }
+        .console-row { display: flex; gap: 8px; }
+        .console-row select { background: #222; border: 1px solid #444; color: #00ff00; font-family: monospace; padding: 5px; border-radius: 4px; }
+        .console-input { flex: 1; background: transparent; border: none; border-bottom: 1px solid #444; color: #00ff00; font-family: monospace; font-size: 0.95rem; outline: none; }
+        .console-btn { background: #222; border: 1px solid #444; color: #00ff00; padding: 4px 12px; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -178,144 +42,106 @@
         <h1>ZUK Панель Управления</h1>
         <div class="status-bar">
             <span id="user-info">Администратор</span>
-            <span id="ping-status" style="color: #00ff00;">● Бот активен</span>
+            <span id="ping-status" style="color: #00ff00;">● GitHub Cloud</span>
         </div>
     </header>
 
     <select id="pc-selector" class="select-box">
-        <option value="">-- Выберите активный ПК --</option>
-        <option value="DESKTOP_MAIN_admin">DESKTOP_MAIN (admin)</option>
-        <option value="WORK_STATION_user">WORK_STATION (user)</option>
+        <option value="MY_DESKTOP_PC">Основной ПК (MY_DESKTOP_PC)</option>
     </select>
 
     <div class="grid-container">
-        <button class="btn" onclick="sendCommand('screen')">
-            <span class="btn-icon">📸</span>
-            <span>Скриншот</span>
-        </button>
-        <button class="btn" onclick="sendCommand('sysinfo')">
-            <span class="btn-icon">ℹ️</span>
-            <span>Инфо ПК</span>
-        </button>
-        <button class="btn" onclick="sendCommand('ps')">
-            <span class="btn-icon">📋</span>
-            <span>Процессы</span>
-        </button>
-        <button class="btn" onclick="sendCommand('clip')">
-            <span class="btn-icon">🔑</span>
-            <span>Буфер</span>
-        </button>
-        <button class="btn" onclick="sendCommand('mon_off')">
-            <span class="btn-icon">🔌</span>
-            <span>Выкл Монитор</span>
-        </button>
-        <button class="btn" onclick="sendCommand('lock')">
-            <span class="btn-icon">🔒</span>
-            <span>Блок ПК</span>
-        </button>
-        <button class="btn danger" onclick="sendCommand('bsod')">
-            <span class="btn-icon">☠️</span>
-            <span>Крит (BSOD)</span>
-        </button>
-        <button class="btn" onclick="refreshPCList()">
-            <span class="btn-icon">🔄</span>
-            <span>Обновить ПК</span>
-        </button>
+        <button class="btn" onclick="sendAction('screen')"><span class="btn-icon">📸</span><span>Скриншот</span></button>
+        <button class="btn" onclick="sendAction('sysinfo')"><span class="btn-icon">ℹ️</span><span>Инфо ПК</span></button>
+        <button class="btn" onclick="sendAction('ps')"><span class="btn-icon">📋</span><span>Процессы</span></button>
+        <button class="btn" onclick="sendAction('clip')"><span class="btn-icon">🔑</span><span>Буфер</span></button>
+        <button class="btn" onclick="sendAction('mon_off')"><span class="btn-icon">🔌</span><span>Выкл Монитор</span></button>
+        <button class="btn" onclick="sendAction('lock')"><span class="btn-icon">🔒</span><span>Блок ПК</span></button>
     </div>
 
     <div class="console-box">
-        <div class="console-title">ZUK_TERMINAL_ENGINE v1.0</div>
+        <div class="console-title">ZUK_TERMINAL_ENGINE v1.1</div>
         <div class="console-row">
-            <select id="shell-type">
-                <option value="cmd">CMD</option>
-                <option value="ps">PS</option>
-            </select>
-            <input type="text" id="raw-command" class="console-input" placeholder="Введите команду..." onkeydown="if(event.key === 'Enter') sendRawCommand()">
-            <button class="console-btn" onclick="sendRawCommand()">></button>
+            <select id="shell-type"><option value="cmd">CMD</option><option value="ps">PS</option></select>
+            <input type="text" id="raw-command" class="console-input" placeholder="Введите команду...">
+            <button class="console-btn" onclick="sendTerminalCommand()">></button>
         </div>
     </div>
 
     <script>
-        // Инициализируем Telegram WebApp API
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем приложение на весь экран телефона
-        
-        // Применяем стили оформления Telegram
+        tg.expand();
         document.body.classList.add('tg');
-
-        // Выводим имя пользователя из Telegram в шапку панели
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             document.getElementById('user-info').innerText = `Админ: ${tg.initDataUnsafe.user.first_name}`;
         }
 
-        // URL твоего будущего сервера-посредника
-        const BACKEND_SERVER = "https://your-backend-api-server.com"; 
+        // ================= НАСТРОЙКА ДАННЫХ GITHUB =================
+        const GITHUB_TOKEN = "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"; 
+        const REPO_OWNER = "boxeshakersiop-cyber";
+        const REPO_NAME = "fsotgbot"; // Имя с дефисом, как на скришоте
+        // ===========================================================
 
-        // Функция отправки базовых команд из кнопок
-        function sendCommand(action) {
-            const activePC = document.getElementById('pc-selector').value;
-            if (!activePC) {
-                tg.showAlert("Ошибка: Сначала выберите целевой компьютер из списка!");
-                return;
-            }
-
-            // Легкая вибрация телефона при нажатии на кнопку управления
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-
-            console.log(`Отправка команды: ${action} для хоста: ${activePC}`);
-
-            // Шаблон AJAX-запроса на твой сервер-посредник
-            /*
-            fetch(`${BACKEND_SERVER}/add_task`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ pc_id: activePC, command: action })
+        function commitTaskFile(payloadData) {
+            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/task.json`;
+            
+            fetch(url, { headers: { "Authorization": `token ${GITHUB_TOKEN}` } })
+            .then(res => {
+                if (res.status === 404) return { sha: null };
+                return res.json();
             })
-            .then(res => res.json())
-            .then(data => tg.showScanQrPopup({text: "Команда отправлена!"}))
-            .catch(err => tg.showAlert("Ошибка связи с веб-сервером"));
-            */
-            
-            // Временное уведомление внутри Telegram для теста интерфейса
-            tg.showPopup({
-                title: "Действие отправлено",
-                message: `Хост: ${activePC}\nКоманда: ${action}`,
-                buttons: [{type: "ok"}]
+            .then(fileData => {
+                const sha = fileData.sha;
+                const base64Content = btoa(unescape(encodeURIComponent(JSON.stringify(payloadData))));
+
+                const bodyData = {
+                    message: "🦾 Command triggered from Mini App",
+                    content: base64Content
+                };
+                if (sha) bodyData.sha = sha;
+
+                return fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `token ${GITHUB_TOKEN}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(bodyData)
+                });
+            })
+            .then(res => {
+                if(res.ok) {
+                    tg.showPopup({ title: "Успешно", message: "Команда улетела на GitHub!", buttons: [{type: "ok"}] });
+                } else {
+                    tg.showAlert("Ошибка записи. Проверь правильность токена в коде.");
+                }
+            })
+            .catch(err => tg.showAlert("Ошибка сети: " + err));
+        }
+
+        function sendAction(actionType) {
+            const targetPC = document.getElementById('pc-selector').value;
+            commitTaskFile({
+                target_pc: targetPC,
+                type: "button",
+                command: actionType,
+                timestamp: Date.now()
             });
         }
 
-        // Функция отправки кастомных команд из строки терминала
-        function sendRawCommand() {
-            const activePC = document.getElementById('pc-selector').value;
+        function sendTerminalCommand() {
+            const targetPC = document.getElementById('pc-selector').value;
             const shell = document.getElementById('shell-type').value;
-            const commandText = document.getElementById('raw-command').value;
+            const text = document.getElementById('raw-command').value;
+            if(!text.trim()) return;
 
-            if (!activePC) {
-                tg.showAlert("Выберите целевой ПК!");
-                return;
-            }
-            if (!commandText.trim()) return;
-
-            if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-
-            tg.showPopup({
-                title: "Запуск терминала",
-                message: `Режим: ${shell.toUpperCase()}\nКоманда: ${commandText}\nОтправлено на ${activePC}`,
-                buttons: [{type: "ok"}]
+            commitTaskFile({
+                target_pc: targetPC,
+                type: shell,
+                command: text,
+                timestamp: Date.now()
             });
-
-            // Очищаем строку ввода после отправки
             document.getElementById('raw-command').value = "";
-        }
-
-        // Функция обновления списка активных онлайн машин (запрос к БД сервера)
-        function refreshPCList() {
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-            
-            // Тут будет fetch запрос, который получает массив доступных ПК от сервера
-            console.log("Обновление списка сессий...");
         }
     </script>
 </body>
